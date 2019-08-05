@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_16dp_for_text">16dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
     <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="textSize_24sp_for_title">24sp</dimen>
+    <dimen name="textSize_18sp">18sp</dimen>
 </resources>

@@ -3,5 +3,7 @@
     <string name="hint_deal_title">Deal Title</string>
     <string name="hint_price_num_only">500 (numbers only)</string>
     <string name="hint_description">Description</string>
-    <string name="text_save">save</string>
+    <string name="save">save</string>
+    <string name="new_travel_deal">New Travel Deal</string>
+    <string name="delete">Delete</string>
 </resources>
