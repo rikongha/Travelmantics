@@ -6,14 +6,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!--  <TextView
-          android:id="@+id/tv_deals_title"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          tools:hint="TextView"
-          android:textSize="20sp"/>-->
-
     <ImageView
         android:id="@+id/image_dealsRow_deal"
         android:layout_width="wrap_content"

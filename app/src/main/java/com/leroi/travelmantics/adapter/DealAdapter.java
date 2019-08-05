@@ -103,7 +103,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             tvTitle = itemView.findViewById(R.id.tv_dealsRow_title);
             tvDescription = itemView.findViewById(R.id.tv_dealsRow_description);
             tvPrice = itemView.findViewById(R.id.tv_dealsRow_price);
-            dealImage = itemView.findViewById(R.id.image_deal_photo);
+            dealImage = itemView.findViewById(R.id.image_dealsRow_deal);
             itemView.setOnClickListener(this);
         }
 
