@@ -2,7 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/insert_menu"
+        android:id="@+id/menu_list_item_insert"
         android:title="New Travel Deal"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_list_item_logout"
+        android:title="@string/logout"
         app:showAsAction="never"/>
 </menu>

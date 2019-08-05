@@ -2,6 +2,7 @@ package com.leroi.travelmantics;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,63 +34,38 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-/*//        mFirebaseDatabase = FirebaseDatabase.getInstance();
-//        mDatabaseReference = mFirebaseDatabase.getReference().child("traveldeals");
-        FirebaseUtil.openFbReference("traveldeals");
-        mFirebaseDatabase = FirebaseUtil.sFirebaseDatabase;
-        mDatabaseReference = FirebaseUtil.sDatabaseReference;
-        mChildListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                TextView tvDeals = findViewById(R.id.tv_deals_title);
-                TravelDeal travelDeal = dataSnapshot.getValue(TravelDeal.class);
-                tvDeals.setText(tvDeals.getText() + "\n" + travelDeal.getTitle());
-//                tvDeals.setText(getApplicationContext().getString(R.string.text_deals, travelDeal.get));
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        mDatabaseReference.addChildEventListener(mChildListener);*/
-        FirebaseUtil.openFbReference("traveldeals", this);
-        RecyclerView rvDeals = findViewById(R.id.rv_list_deals);
-        final DealAdapter dealsAdapter = new DealAdapter();
-        rvDeals.setAdapter(dealsAdapter);
-        LinearLayoutManager dealsLayoutManager =
-                new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        rvDeals.setLayoutManager(dealsLayoutManager);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_list_activity_insert, menu);
+        inflater.inflate(R.menu.menu_list_activity, menu);
+        MenuItem insertMenuItem = menu.findItem(R.id.menu_list_item_insert);
+        if (FirebaseUtil.isAdmin) {
+            insertMenuItem.setVisible(true);
+        } else {
+            insertMenuItem.setVisible(false);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.insert_menu:
+            case R.id.menu_list_item_insert:
                 Intent intent = new Intent(this, DealActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.menu_list_item_logout:
+                AuthUI.getInstance()
+                        .signOut(this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("Logout", "User logged out");
+                                FirebaseUtil.attachListener();
+                            }
+                        });
+                FirebaseUtil.detachListener();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -95,6 +74,13 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        FirebaseUtil.openFbReference("traveldeals", this);
+        RecyclerView rvDeals = findViewById(R.id.rv_list_deals);
+        final DealAdapter dealsAdapter = new DealAdapter();
+        rvDeals.setAdapter(dealsAdapter);
+        LinearLayoutManager dealsLayoutManager =
+                new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        rvDeals.setLayoutManager(dealsLayoutManager);
         FirebaseUtil.detachListener();
     }
 
@@ -103,4 +89,8 @@ public class ListActivity extends AppCompatActivity {
         super.onPause();
         FirebaseUtil.attachListener();
     }
+
+  /*  public void showMenu() {
+        invalidateOptionsMenu();
+    }*/
 }

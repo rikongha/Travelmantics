@@ -41,4 +41,27 @@
         android:hint="@string/hint_description"
         app:layout_constraintTop_toBottomOf="@+id/text_insert_price"
         tools:layout_editor_absoluteX="189dp" />
+
+    <Button
+        android:id="@+id/btn_deal_upload_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_24dp"
+        android:background="@color/colorAccent"
+        android:text="@string/upload_image"
+        android:textColor="@color/common_google_signin_btn_text_dark"
+        app:layout_constraintEnd_toEndOf="@+id/text_insert_description"
+        app:layout_constraintStart_toStartOf="@+id/text_insert_description"
+        app:layout_constraintTop_toBottomOf="@+id/text_insert_description" />
+
+    <ImageView
+        android:id="@+id/image_deal_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_deal_upload_image"
+        tools:srcCompat="@android:drawable/screen_background_dark_transparent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

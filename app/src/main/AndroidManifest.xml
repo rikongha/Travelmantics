@@ -20,6 +20,7 @@
         </activity>
         <activity
             android:name=".DealActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".ListActivity"
             android:label="@string/new_travel_deal"
             tools:targetApi="jelly_bean">
