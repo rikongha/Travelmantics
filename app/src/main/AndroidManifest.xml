@@ -10,7 +10,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ListActivity"
+        <activity android:name=".TakeTripActivity"
+            android:label="Travel with us"
+            android:parentActivityName=".ListActivity"
+            android:screenOrientation="portrait"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DealActivity" />
+        </activity>
+        <activity
+            android:name=".ListActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,9 +30,9 @@
         </activity>
         <activity
             android:name=".DealActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ListActivity"
             android:label="@string/new_travel_deal"
+            android:parentActivityName=".ListActivity"
+            android:screenOrientation="portrait"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
