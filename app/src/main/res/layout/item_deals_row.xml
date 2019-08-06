@@ -31,12 +31,14 @@
 
     <TextView
         android:id="@+id/tv_dealsRow_description"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_8dp"
         android:layout_marginTop="@dimen/margin_8dp"
-        android:textSize="@dimen/dimen_16sp_text"
+        android:layout_marginEnd="8dp"
         android:textColor="@android:color/black"
+        android:textSize="@dimen/dimen_16sp_text"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_dealsRow_deal"
         app:layout_constraintTop_toBottomOf="@+id/tv_dealsRow_title"
         tools:text="Description of travel deal" />

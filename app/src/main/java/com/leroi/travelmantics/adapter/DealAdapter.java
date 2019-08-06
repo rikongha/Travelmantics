@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 
-import static com.leroi.travelmantics.utils.FirebaseUtil.checkAdmin;
-
 public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder> {
 
     ArrayList<TravelDeal> deals;
@@ -118,7 +116,6 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
         public void bind(TravelDeal deal) {
             tvTitle.setText(deal.getTitle());
             tvDescription.setText(deal.getDescription());
-//            tvPrice.setText(deal.getPrice());
             NumberFormat format = NumberFormat.getCurrencyInstance(Locale.US);
             String formattedPrice = format.format(Double.parseDouble(deal.getPrice()));
             tvPrice.setText(String.format(mContext.getResources().getString(R.string.price_value), formattedPrice));
@@ -130,7 +127,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             int position = getAdapterPosition();
             Log.d("Click", String.valueOf(position));
             TravelDeal selectedDeal = deals.get(position);
-            if (FirebaseUtil.isAdmin){
+            if (FirebaseUtil.isAdmin) {
                 Intent intent = new Intent(view.getContext(), DealActivity.class);
                 intent.putExtra("Deal", selectedDeal);
                 view.getContext().startActivity(intent);

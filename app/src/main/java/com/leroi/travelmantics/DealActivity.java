@@ -78,6 +78,10 @@ public class DealActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    * Sometimes network response is slow and so (admin) edit activity is navigated to
+    * this ensures that even then, normal users cannot modify deal entries
+    */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
