@@ -9,26 +9,22 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.leroi.travelmantics.adapter.DealAdapter;
-import com.leroi.travelmantics.model.TravelDeal;
 import com.leroi.travelmantics.utils.FirebaseUtil;
 
-import java.util.ArrayList;
+import static android.widget.LinearLayout.VERTICAL;
 
 public class ListActivity extends AppCompatActivity {
-    ArrayList<TravelDeal> deals;
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mDatabaseReference;
-    private ChildEventListener mChildListener;
+
+    public ListActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +72,12 @@ public class ListActivity extends AppCompatActivity {
         super.onResume();
         FirebaseUtil.openFbReference("traveldeals", this);
         RecyclerView rvDeals = findViewById(R.id.rv_list_deals);
-        final DealAdapter dealsAdapter = new DealAdapter();
+        final DealAdapter dealsAdapter = new DealAdapter(this);
         rvDeals.setAdapter(dealsAdapter);
         LinearLayoutManager dealsLayoutManager =
                 new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, VERTICAL);
+        rvDeals.addItemDecoration(itemDecor);
         rvDeals.setLayoutManager(dealsLayoutManager);
         FirebaseUtil.detachListener();
     }
@@ -90,7 +88,4 @@ public class ListActivity extends AppCompatActivity {
         FirebaseUtil.attachListener();
     }
 
-  /*  public void showMenu() {
-        invalidateOptionsMenu();
-    }*/
 }

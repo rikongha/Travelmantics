@@ -8,4 +8,8 @@
     <string name="delete">Delete</string>
     <string name="logout">Logout</string>
     <string name="upload_image">Upload Image</string>
+    <string name="description_deal_thumbnail">deal thumbnail</string>
+    <string name="price_value">%1$s</string>
+    <string name="take_trip">TAKE TRIP</string>
+    <string name="take_trip_price">For %1$s only</string>
 </resources>

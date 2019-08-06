@@ -5,4 +5,6 @@
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="textSize_24sp_for_title">24sp</dimen>
     <dimen name="textSize_18sp">18sp</dimen>
+    <dimen name="dimen_24sp_title_text">24sp</dimen>
+    <dimen name="dimen_16sp_text">16sp</dimen>
 </resources>

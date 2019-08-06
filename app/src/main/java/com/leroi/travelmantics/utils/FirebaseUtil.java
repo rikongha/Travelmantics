@@ -1,7 +1,6 @@
 package com.leroi.travelmantics.utils;
 
 import android.app.Activity;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.leroi.travelmantics.ListActivity;
 import com.leroi.travelmantics.model.TravelDeal;
 
 import java.util.ArrayList;
@@ -35,6 +33,7 @@ public class FirebaseUtil {
     private static Activity caller;
     private static int RC_SIGN_IN = 123;
     public static boolean isAdmin;
+    private static int welcomeToastCount = 0;
 
 
     private FirebaseUtil() {
@@ -56,7 +55,10 @@ public class FirebaseUtil {
                         String userId = firebaseAuth.getUid();
                         checkAdmin(userId);
                     }
-                    Toast.makeText(callerActivity.getBaseContext(), "Welcome back", Toast.LENGTH_LONG).show();
+                    if (welcomeToastCount == 0 ) { //ensures welcome toast only shows once
+                        Toast.makeText(callerActivity.getBaseContext(), "Welcome back", Toast.LENGTH_LONG).show();
+                        welcomeToastCount++;
+                    }
                 }
             };
             connectStorage();

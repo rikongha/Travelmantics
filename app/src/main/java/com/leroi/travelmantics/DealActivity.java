@@ -36,12 +36,13 @@ import java.util.Objects;
 public class DealActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
-    EditText textTitle;
-    EditText price;
-    EditText description;
+    private EditText textTitle;
+    private EditText price;
+    private EditText description;
     TravelDeal deal;
-    ImageView dealImage;
+    private ImageView dealImage;
     private static final int PICTURE_REQUEST_CODE = 42;
+    private Button mBtnUploadImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,8 @@ public class DealActivity extends AppCompatActivity {
         description.setText(deal.getDescription());
         price.setText(deal.getPrice());
         showImage(deal.getImageUrl());
-        Button btnUploadImage = findViewById(R.id.btn_deal_upload_image);
-        btnUploadImage.setOnClickListener(new View.OnClickListener() {
+        mBtnUploadImage = findViewById(R.id.btn_deal_upload_image);
+        mBtnUploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -84,11 +85,11 @@ public class DealActivity extends AppCompatActivity {
         if (FirebaseUtil.isAdmin) {
             menu.findItem(R.id.menu_item_delete).setVisible(true);
             menu.findItem(R.id.menu_item_save).setVisible(true);
-            enableEditText(true);
+            enableEditDealInfo(true);
         } else {
             menu.findItem(R.id.menu_item_delete).setVisible(false);
             menu.findItem(R.id.menu_item_save).setVisible(false);
-            enableEditText(false);
+            enableEditDealInfo(false);
         }
         return true;
     }
@@ -117,7 +118,7 @@ public class DealActivity extends AppCompatActivity {
         if (requestCode == PICTURE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Uri imageUri = data.getData();
             final StorageReference reference = FirebaseUtil.sStorageReference
-                    .child(Objects.requireNonNull(imageUri).getLastPathSegment());
+                    .child(Objects.requireNonNull(Objects.requireNonNull(imageUri).getLastPathSegment()));
             reference.putFile(imageUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -128,7 +129,7 @@ public class DealActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         Uri downloadUrl = task.getResult();
-                        String pictureName = task.getResult().getPath();
+                        String pictureName = Objects.requireNonNull(task.getResult()).getPath();
                         if (downloadUrl != null) deal.setImageUrl(downloadUrl.toString());
                         deal.setImageName(pictureName);
                         showImage(deal.getImageUrl());
@@ -154,7 +155,6 @@ public class DealActivity extends AppCompatActivity {
         deal.setTitle(textTitle.getText().toString());
         deal.setPrice(price.getText().toString());
         deal.setDescription(description.getText().toString());
-//        TravelDeal deal = new TravelDeal(title, description, price, "");
         if (deal.getId() == null) {
             mDatabaseReference.push().setValue(deal);
         } else {
@@ -190,10 +190,11 @@ public class DealActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void enableEditText(boolean isEnabled) {
+    private void enableEditDealInfo(boolean isEnabled) {
         textTitle.setEnabled(isEnabled);
         description.setEnabled(isEnabled);
         price.setEnabled(isEnabled);
+        mBtnUploadImage.setEnabled(isEnabled);
     }
 
     private void showImage(String url) {

@@ -2,7 +2,6 @@ package com.leroi.travelmantics.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +20,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.leroi.travelmantics.DealActivity;
 import com.leroi.travelmantics.R;
+import com.leroi.travelmantics.TakeTripActivity;
 import com.leroi.travelmantics.model.TravelDeal;
 import com.leroi.travelmantics.utils.FirebaseUtil;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
+
+import static com.leroi.travelmantics.utils.FirebaseUtil.checkAdmin;
 
 public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder> {
 
@@ -35,11 +39,15 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildListener;
     private ImageView dealImage;
+    private Context mContext;
+    private String userId;
 
-    public DealAdapter() {
+    public DealAdapter(Context context) {
         mFirebaseDatabase = FirebaseUtil.sFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.sDatabaseReference;
         deals = FirebaseUtil.mDeals;
+        this.mContext = context;
+        userId = FirebaseUtil.sFirebaseAuth.getUid();
         mChildListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -93,7 +101,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
         return deals.size();
     }
 
-    public class DealViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
+    public class DealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvTitle;
         TextView tvDescription;
         TextView tvPrice;
@@ -110,7 +118,10 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
         public void bind(TravelDeal deal) {
             tvTitle.setText(deal.getTitle());
             tvDescription.setText(deal.getDescription());
-            tvPrice.setText(deal.getPrice());
+//            tvPrice.setText(deal.getPrice());
+            NumberFormat format = NumberFormat.getCurrencyInstance(Locale.US);
+            String formattedPrice = format.format(Double.parseDouble(deal.getPrice()));
+            tvPrice.setText(String.format(mContext.getResources().getString(R.string.price_value), formattedPrice));
             showImage(deal.getImageUrl());
         }
 
@@ -119,17 +130,24 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             int position = getAdapterPosition();
             Log.d("Click", String.valueOf(position));
             TravelDeal selectedDeal = deals.get(position);
-            Intent intent = new Intent(view.getContext(), DealActivity.class);
-            intent.putExtra("Deal", selectedDeal);
-            view.getContext().startActivity(intent);
+            if (FirebaseUtil.isAdmin){
+                Intent intent = new Intent(view.getContext(), DealActivity.class);
+                intent.putExtra("Deal", selectedDeal);
+                view.getContext().startActivity(intent);
+            } else {
+                Intent intent = new Intent(view.getContext(), TakeTripActivity.class);
+                intent.putExtra("Deal", selectedDeal);
+                view.getContext().startActivity(intent);
+            }
         }
 
         private void showImage(String url) {
             if (url != null && !url.isEmpty()) {
-                int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+                int widthHeight = 160;
                 Picasso.get()
                         .load(url)
-                        .resize(160, 160)
+                        .placeholder(R.drawable.ic_placeholder_photo)
+                        .resize(widthHeight, widthHeight)
                         .centerCrop()
                         .into(dealImage);
             }
